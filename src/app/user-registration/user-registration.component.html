@@ -1,0 +1,16 @@
+<h1>user-registration</h1>
+<form
+  class="example-form"
+  [formGroup]="userForm"
+  (ngSubmit)="onSubmit()"
+  autocomplete="off"
+  #noteForm="ngForm"
+>
+  <div fxLayout="row" fxLayoutGap="10">
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>Name</mat-label>
+      <input matInput placeholder="Name" formControlName="firstName" />
+    </mat-form-field>
+  </div>
+  <br />
+</form>

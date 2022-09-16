@@ -20,6 +20,7 @@ export interface UserModel {
   styleUrls: ['./user-registration.component.css'],
 })
 export class UserRegistrationComponent implements OnInit {
+  genderList = ['Male', 'Female'];
   userForm: FormGroup = this.fb.group({
     id: this.fb.control(null),
     firstName: this.fb.control(null, [Validators.required]),

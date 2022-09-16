@@ -94,6 +94,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     PortalModule,
     ScrollingModule,
     MatFormFieldModule,
+    MatRadioGroupHarness,
   ],
 })
 export class MaterialModule {}

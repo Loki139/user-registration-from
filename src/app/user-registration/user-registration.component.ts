@@ -5,6 +5,7 @@ import {
   FormGroupDirective,
   Validators,
 } from '@angular/forms';
+import { MatTable } from '@angular/material/table';
 
 export interface UserModel {
   id: string;
@@ -26,6 +27,8 @@ export interface UserModel {
 })
 export class UserRegistrationComponent implements OnInit {
   @ViewChild('noteForm', { static: true }) noteForm: FormGroupDirective;
+  // @ViewChild('table', { static: true }) table: MatTable<any>;
+  @ViewChild('table') table: MatTable<Element>;
   genderList = ['Male', 'Female'];
   userDetailList: UserModel[] = [];
   displayedColumns = ['position', 'firstName', 'lastName', 'email', 'phone', 'company', 'dob', 'action'];
@@ -73,12 +76,27 @@ export class UserRegistrationComponent implements OnInit {
       this.userDetailList.push(userDetails);
     }
     console.log(' this.userDetailList ', this.userDetailList);
-    localStorage.setItem('User List', JSON.stringify(this.userDetailList));
+    setTimeout(() => {
+      if (this.userDetailList && this.userDetailList.length) {
+          this.table.renderRows();
+      }
+  },1500);  
+  localStorage.setItem('User List', JSON.stringify(this.userDetailList));
     this.clear();
   }
 
-  deleteUser(index: number){
+  editUser(userDetail : UserModel){
+    this.userForm.patchValue(userDetail);
+  }
 
+  deleteUser(index: number){
+    this.userDetailList.splice(index, 1);
+    setTimeout(() => {
+        if (this.userDetailList?.length) {
+            this.table.renderRows();
+        }
+    });
+    localStorage.setItem('User List', JSON.stringify(this.userDetailList));
   }
 
   clear() {

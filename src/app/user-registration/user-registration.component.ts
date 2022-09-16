@@ -37,5 +37,9 @@ export class UserRegistrationComponent implements OnInit {
 
   ngOnInit() {}
 
-  onSubmit() {}
+  onSubmit() {
+    console.log('AA', this.userForm.getRawValue());
+  }
+
+  reset() {}
 }

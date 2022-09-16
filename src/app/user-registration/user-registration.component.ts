@@ -1,5 +1,10 @@
-import { Component, OnInit, VERSION } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, VERSION, ViewChild } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  FormGroupDirective,
+  Validators,
+} from '@angular/forms';
 
 export interface UserModel {
   id: string;
@@ -20,7 +25,11 @@ export interface UserModel {
   styleUrls: ['./user-registration.component.css'],
 })
 export class UserRegistrationComponent implements OnInit {
+  @ViewChild('noteForm', { static: true }) noteForm: FormGroupDirective;
   genderList = ['Male', 'Female'];
+  userDetailList: UserModel[] = [];
+  displayedColumns = ['position', 'firstName', 'lastName', 'email', 'phone', 'company', 'dob', 'action'];
+
   userForm: FormGroup = this.fb.group({
     id: this.fb.control(null),
     firstName: this.fb.control(null, [Validators.required]),
@@ -36,11 +45,44 @@ export class UserRegistrationComponent implements OnInit {
 
   constructor(private fb: FormBuilder) {}
 
-  ngOnInit() {}
-
-  onSubmit() {
-    console.log('AA', this.userForm.getRawValue());
+  ngOnInit() {
+    if (JSON.parse(localStorage.getItem('User List'))) {
+      this.userDetailList = JSON.parse(localStorage.getItem('User List'));
+    }
   }
 
-  reset() {}
+  onSubmit() {
+    if (this.userForm.invalid) {
+      return;
+    }
+
+    this.userDetailList = this.userDetailList?.length
+      ? this.userDetailList
+      : [];
+    let userDetails: UserModel = this.userForm.getRawValue() as UserModel;
+    userDetails.id = userDetails.id
+      ? userDetails.id
+      : 'USER_' + (this.userDetailList?.length + 1);
+    if (
+      this.userDetailList?.length &&
+      this.userDetailList?.some((user) => user.id == userDetails.id)
+    ) {
+      let index = this.userDetailList.findIndex((r) => r.id == userDetails.id);
+      this.userDetailList[index] = userDetails;
+    } else {
+      this.userDetailList.push(userDetails);
+    }
+    console.log(' this.userDetailList ', this.userDetailList);
+    localStorage.setItem('User List', JSON.stringify(this.userDetailList));
+    this.clear();
+  }
+
+  deleteUser(index: number){
+
+  }
+
+  clear() {
+    this.userForm.reset();
+    this.noteForm.resetForm();
+  }
 }
